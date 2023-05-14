@@ -7,69 +7,70 @@ exports.create = (req, res) => {
   const tutorial = {
     title: req.body.title,
     description: req.body.description,
-    published: req.body.published ? req.body.published : false
+    published: req.body.published
   };
-
-  collection.insertOne(tutorial, (err, result) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send({ message: "Error creating tutorial" });
-    } else {
-      res.send(result.ops[0]);
-    }
-  });
+  collection.insertOne(tutorial)
+    .then(result => {
+        console.log(result);
+        res.status(200).send(result);
+    })
+    .catch(error => {
+        console.error(error);
+        res.status(500).send({ message: "Error creating tutorial" });
+    })
 };
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
   const collection = db.get().collection("tutorials");
-  collection.find({}).toArray((err, data) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send({ message: "Error retrieving tutorials" });
-    } else {
-      res.send(data);
-    }
-  });
+  collection.find({}).toArray().
+    then((arr) => {
+        console.log(arr);
+        res.send(arr);
+    })
+    .catch((err) => {
+        console.log(err);
+        res.status(500).send({ message: "Error retrieving tutorials" });
+    })
 };
 
 // Update a Tutorial by the id in the request
 exports.update = (req, res) => {
+    console.log("inside update")
   const collection = db.get().collection("tutorials");
+  console.log("got collection successfully")
   const tutorial = {
     title: req.body.title,
     description: req.body.description,
     published: req.body.published ? req.body.published : false
   };
-
+  console.log(req)
+  console.log(tutorial)
   collection.updateOne(
     { _id: new ObjectId(req.params.id) },
-    { $set: tutorial },
-    (err, result) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send({ message: "Error updating tutorial" });
-      } else if (result.modifiedCount === 0) {
-        res.status(404).send({ message: "Tutorial not found" });
-      } else {
-        res.send({ message: "Tutorial updated successfully" });
-      }
-    }
-  );
+    { $set: tutorial })
+    .then(result => {
+        console.log(result);
+        res.status(200).send(result);
+    })
+    .catch(error => {
+        console.error(error);
+        res.status(500).send({ message: "Error creating tutorial" });
+    })
 };
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = (req, res) => {
   const collection = db.get().collection("tutorials");
-  collection.deleteOne({ _id: new ObjectId(req.params.id) }, (err, result) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send({ message: "Error deleting tutorial" });
-    } else if (result.deletedCount === 0) {
-      res.status(404).send({ message: "Tutorial not found" });
-    } else {
-      res.send({ message: "Tutorial deleted successfully" });
-    }
-  });
+  collection.deleteOne(
+    { _id: new ObjectId(req.params.id) })
+    .then(result => {
+        console.log(result);
+        res.status(200).send(result);
+    })
+    .catch(error => {
+        console.error(error);
+        res.status(500).send({ message: "Error deleting tutorial" });
+    })
 };
 

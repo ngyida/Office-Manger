@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const MongoClient = require("mongodb").MongoClient
+const bodyParser = require('body-parser');
 const tutorialsRoutes = require("./routes.js");
 const db = require('./db');
 
@@ -11,6 +11,7 @@ var corsOptions = {
 }
 
 app.use(express.json())
+app.use(bodyParser.json());
 app.use(cors(corsOptions))
 app.use("/api/tutorials", tutorialsRoutes);
 
