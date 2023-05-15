@@ -54,7 +54,10 @@ const AddTutorial = () => {
       {submitted ? (
         <div>
           <h4>Tutorial submmited successfully!</h4>
-          <button className="btn btn-primary" onClick={newTutorial}>
+          <button className="btn btn-primary" 
+          onClick={newTutorial}
+          style={{ marginRight: '5px' }}
+          >
             Add new tutorial
           </button>
           <button className="btn btn-secondary" onClick={navigateHome}>
