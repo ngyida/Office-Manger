@@ -13,7 +13,7 @@ var corsOptions = {
 app.use(express.json())
 app.use(bodyParser.json());
 app.use(cors(corsOptions))
-app.use("/api/tutorials", tutorialsRoutes);
+app.use("/tutorials", tutorialsRoutes);
 
 // listen for request from local server
 app.get('/hello-world', (req, res) => res.send('Hello World'))

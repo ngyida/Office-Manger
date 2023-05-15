@@ -34,6 +34,22 @@ exports.findAll = (req, res) => {
     })
 };
 
+exports.find = (req, res) => {
+  const collection = db.get().collection("tutorials");
+  collection.findOne({ _id: new ObjectId(req.params.id) })
+  .then((tutorial) => {
+    if (!tutorial) {
+      return res.status(404).send({ message: "Tutorial not found" });
+    }
+    console.log(tutorial);
+    res.send(tutorial);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).send({ message: "Error retrieving tutorial" });
+  })
+};
+
 // Update a Tutorial by the id in the request
 exports.update = (req, res) => {
     console.log("inside update")
@@ -74,3 +90,16 @@ exports.delete = (req, res) => {
     })
 };
 
+// Delete all Tutorials from the database
+exports.deleteAll = (req, res) => {
+  const collection = db.get().collection("tutorials");
+  collection.deleteMany({})
+    .then(result => {
+      console.log(result);
+      res.status(200).send(result);
+    })
+    .catch(error => {
+      console.error(error);
+      res.status(500).send({ message: "Error deleting tutorials" });
+    })
+};
