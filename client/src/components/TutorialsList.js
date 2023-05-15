@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const TutorialsList = (props) => {
   const [tutorials, setTutorials] = useState([]);
-  // const [searchTitle, setSearchTitle] = useState("");
+  const [searchTitle, setSearchTitle] = useState("");
   const tutorialsRef = useRef();
   const navigate = useNavigate();
 
@@ -16,10 +16,10 @@ const TutorialsList = (props) => {
     retrieveTutorials();
   }, []);
 
-//   const onChangeSearchTitle = (e) => {
-//     const searchTitle = e.target.value;
-//     setSearchTitle(searchTitle);
-//   };
+  const onChangeSearchTitle = (e) => {
+    const searchTitle = e.target.value;
+    setSearchTitle(searchTitle);
+  };
 
   const retrieveTutorials = () => {
     TutorialDataService.getAll()
@@ -46,15 +46,15 @@ const TutorialsList = (props) => {
       });
   };
 
-//   const findByTitle = () => {
-//     TutorialDataService.findByTitle(searchTitle)
-//       .then((response) => {
-//         setTutorials(response.data);
-//       })
-//       .catch((e) => {
-//         console.log(e);
-//       });
-//   };
+  const findByTitle = () => {
+    TutorialDataService.findByTitle(searchTitle)
+      .then((response) => {
+        setTutorials([response.data]);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const openTutorial = (rowIndex) => {
     const id = tutorialsRef.current[rowIndex]._id;
@@ -66,7 +66,6 @@ const TutorialsList = (props) => {
     const id = tutorialsRef.current[rowIndex]._id;
     TutorialDataService.remove(id)
       .then((response) => {
-        // navigate("");
         let newTutorials = [...tutorialsRef.current];
         newTutorials.splice(rowIndex, 1);
 
@@ -129,6 +128,26 @@ const TutorialsList = (props) => {
 
   return (
     <div className="list row">
+      <div className="col-md-8">
+        <div className="input-group mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search by title"
+            value={searchTitle}
+            onChange={onChangeSearchTitle}
+          />
+          <div className="input-group-append">
+            <button
+              className="btn btn-outline-secondary"
+              type="button"
+              onClick={findByTitle}
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
       <div className="col-md-12 list">
         <table
           className="table table-striped table-bordered"

@@ -34,6 +34,7 @@ exports.findAll = (req, res) => {
     })
 };
 
+// Find a tutorial by the id in the request
 exports.find = (req, res) => {
   const collection = db.get().collection("tutorials");
   collection.findOne({ _id: new ObjectId(req.params.id) })
@@ -50,18 +51,32 @@ exports.find = (req, res) => {
   })
 };
 
+// Find a tutorial by the title in the request
+exports.findByTitle = (req, res) => {
+  const collection = db.get().collection("tutorials");
+  console.log("req:" + req.params.title)
+  collection.findOne({ title: req.params.title})
+  .then((tutorial) => {
+    if (!tutorial) {
+      return res.status(404).send({ message: "Tutorial not found" });
+    }
+    console.log(tutorial);
+    res.send(tutorial);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).send({ message: "Error retrieving tutorial" });
+  })
+}
+
 // Update a Tutorial by the id in the request
 exports.update = (req, res) => {
-    console.log("inside update")
   const collection = db.get().collection("tutorials");
-  console.log("got collection successfully")
   const tutorial = {
     title: req.body.title,
     description: req.body.description,
     published: req.body.published ? req.body.published : false
   };
-  console.log(req)
-  console.log(tutorial)
   collection.updateOne(
     { _id: new ObjectId(req.params.id) },
     { $set: tutorial })
