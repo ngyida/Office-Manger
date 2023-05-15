@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import TutorialDataService from "../services/TutorialService";
-import { useTable } from "react-table";
+import { useTable, usePagination } from "react-table";
 import { useNavigate } from "react-router-dom";
 
 
@@ -99,15 +99,25 @@ const TutorialsList = (props) => {
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
+            // <div>
+            //   <span onClick={() => openTutorial(rowIdx)} className="mr-10">
+            //     <i className="far fa-edit action"></i>
+            //   </span>
+
+            //   <span className="ml-2" onClick={() => deleteTutorial(rowIdx)}>
+            //     <i className="fas fa-trash action"></i>
+            //   </span>
+            // </div>
+
             <div>
               <span onClick={() => openTutorial(rowIdx)}>
-                <i className="far fa-edit action mr-2"></i>
+                <i className="far fa-edit action"></i>
               </span>
-
+              &nbsp;
               <span onClick={() => deleteTutorial(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>
-            </div>
+          </div>
           );
         },
       },
@@ -119,12 +129,22 @@ const TutorialsList = (props) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    page,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage,
+    pageOptions,
+    state: { pageIndex, pageSize },
     prepareRow,
-  } = useTable({
-    columns,
-    data: tutorials,
-  });
+  } = useTable(
+    {
+      columns,
+      data: tutorials,
+      initialState: { pageIndex: 0 },
+    },
+    usePagination // Add the usePagination hook here
+  );
 
   return (
     <div className="list row">
@@ -148,6 +168,7 @@ const TutorialsList = (props) => {
           </div>
         </div>
       </div>
+
       <div className="col-md-12 list">
         <table
           className="table table-striped table-bordered"
@@ -165,7 +186,7 @@ const TutorialsList = (props) => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {rows.map((row, i) => {
+            {page.map((row, i) => {
               prepareRow(row);
               return (
                 <tr {...row.getRowProps()}>
@@ -179,6 +200,34 @@ const TutorialsList = (props) => {
             })}
           </tbody>
         </table>
+      </div>
+
+      <div className="pagination justify-content-end mb-3">
+        <ul className="pagination">
+          <li className="page-item">
+            <button
+              className="page-link"
+              onClick={() => previousPage()}
+              disabled={!canPreviousPage}
+            >
+              {"<"}
+            </button>
+          </li>
+          <li className="page-item">
+            <button className="page-link" disabled>
+              Page {pageIndex + 1} of {pageOptions.length}
+            </button>
+          </li>
+          <li className="page-item">
+            <button
+              className="page-link"
+              onClick={() => nextPage()}
+              disabled={!canNextPage}
+            >
+              {">"}
+            </button>
+          </li>
+        </ul>
       </div>
 
       <div className="col-md-8">
