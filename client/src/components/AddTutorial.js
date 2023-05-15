@@ -21,7 +21,8 @@ const AddTutorial = () => {
   const saveTutorial = () => {
     var data = {
       title: tutorial.title,
-      description: tutorial.description
+      description: tutorial.description,
+      published: tutorial.published
     };
 
     TutorialDataService.create(data)
@@ -66,8 +67,9 @@ const AddTutorial = () => {
         </div>
       ) : (
         <div>
-          <div className="form-group">
-            <h4>Add Tutorial</h4>
+          <h4>Add Tutorial</h4>
+
+          <div className="form-group mb-2">
             <label htmlFor="title">Title</label>
             <input
               type="text"
@@ -80,7 +82,7 @@ const AddTutorial = () => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="form-group mb-2">
             <label htmlFor="description">Description</label>
             <input
               type="text"
@@ -93,15 +95,30 @@ const AddTutorial = () => {
             />
           </div>
 
+          <div className="form-group d-flex flex-column mb-3">
+            <label htmlFor="published" className="mr-3">Status</label>
+            <select
+              className="selectpicker ml-2"
+              id="published"
+              required
+              value={tutorial.published}
+              onChange={handleInputChange}
+              name="published"
+            >
+              <option value="true">Published</option>
+              <option value="false">Pending</option>
+            </select>
+          </div>
+
           <button onClick={saveTutorial} 
           className="btn btn-success"
-          style={{ marginTop: '10px', marginRight: '5px' }}
+          style={{ marginRight: '5px' }}
           >
             Submit
           </button>
           <button className="btn btn-secondary" 
           onClick={navigateHome}
-          style={{ marginTop: '10px' }}>
+          >
             Back
           </button>
         </div>
