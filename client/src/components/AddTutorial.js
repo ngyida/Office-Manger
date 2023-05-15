@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import TutorialDataService from "../services/TutorialService";
 import { useNavigate } from "react-router-dom";
 
@@ -10,8 +10,8 @@ const AddTutorial = () => {
     published: false
   };
   const [tutorial, setTutorial] = useState(initialTutorialState);
-  const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
+  const formRef = useRef(null);
 
   const handleInputChange = event => {
     const { name, value } = event.target;
@@ -19,31 +19,32 @@ const AddTutorial = () => {
   };
 
   const saveTutorial = () => {
-    var data = {
-      title: tutorial.title,
-      description: tutorial.description,
-      published: tutorial.published
-    };
-
-    TutorialDataService.create(data)
-      .then(response => {
-        setTutorial({
-          id: response.data.id,
-          title: response.data.title,
-          description: response.data.description,
-          published: response.data.published
+    if (formRef.current.checkValidity()) {
+      alert("Tutorial Submitted!")
+      var data = {
+        title: tutorial.title,
+        description: tutorial.description,
+        published: tutorial.published
+      };
+  
+      TutorialDataService.create(data)
+        .then(response => {
+          setTutorial({
+            id: response.data.id,
+            title: response.data.title,
+            description: response.data.description,
+            published: response.data.published
+          });
+          console.log(response.data);
+          setTutorial(initialTutorialState);
+        })
+        .catch(e => {
+          console.log(e);
         });
-        setSubmitted(true);
-        console.log(response.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  };
-
-  const newTutorial = () => {
-    setTutorial(initialTutorialState);
-    setSubmitted(false);
+    } else {
+      alert("Please fill in all fields")
+    }
+    
   };
 
   const navigateHome = () => {
@@ -52,20 +53,7 @@ const AddTutorial = () => {
 
   return (
     <div className="submit-form">
-      {submitted ? (
-        <div>
-          <h4>Tutorial submmited successfully!</h4>
-          <button className="btn btn-primary" 
-          onClick={newTutorial}
-          style={{ marginRight: '5px' }}
-          >
-            Add new tutorial
-          </button>
-          <button className="btn btn-secondary" onClick={navigateHome}>
-            Back
-          </button>
-        </div>
-      ) : (
+      <form ref={formRef}>
         <div>
           <h4>Add Tutorial</h4>
 
@@ -122,7 +110,7 @@ const AddTutorial = () => {
             Back
           </button>
         </div>
-      )}
+      </form>
     </div>
   );
 };
