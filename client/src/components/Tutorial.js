@@ -120,6 +120,7 @@ const Tutorial = props => {
             <button
               className="btn btn-primary mr-2"
               onClick={() => updatePublished(false)}
+              style={{ marginRight: '5px' }}
             >
               UnPublish
             </button>
@@ -127,12 +128,16 @@ const Tutorial = props => {
             <button
               className="btn btn-primary mr-2"
               onClick={() => updatePublished(true)}
+              style={{ marginRight: '5px' }}
             >
               Publish
             </button>
           )}
 
-          <button className="btn btn-danger mr-2" onClick={deleteTutorial}>
+          <button className="btn btn-danger mr-2" 
+          onClick={deleteTutorial}
+          style={{ marginRight: '5px' }}
+          > 
             Delete
           </button>
 
@@ -140,11 +145,15 @@ const Tutorial = props => {
             type="submit"
             className="btn btn-success"
             onClick={updateTutorial}
+            style={{ marginRight: '5px' }}
           >
             Update
           </button>
 
-          <button className="btn btn-secondary" onClick={navigateHome}>
+          <button className="btn btn-secondary" 
+          onClick={navigateHome}
+          style={{ marginRight: '5px' }}
+          >
             Back
           </button>
           <p>{message}</p>

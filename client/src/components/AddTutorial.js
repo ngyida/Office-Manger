@@ -90,8 +90,16 @@ const AddTutorial = () => {
             />
           </div>
 
-          <button onClick={saveTutorial} className="btn btn-success">
+          <button onClick={saveTutorial} 
+          className="btn btn-success"
+          style={{ marginTop: '10px', marginRight: '5px' }}
+          >
             Submit
+          </button>
+          <button className="btn btn-secondary" 
+          onClick={navigateHome}
+          style={{ marginTop: '10px' }}>
+            Back
           </button>
         </div>
       )}

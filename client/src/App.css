@@ -8,6 +8,18 @@
 }
 
 .edit-form {
-  max-width: 310px;
+  max-width: 330px;
   margin: auto;
+}
+
+.navbar-brand {
+  padding-left: 20px;
+}
+
+.nav-item {
+  padding-top: 5px;
+}
+
+.form-group label {
+  padding-bottom: 5px;
 }
