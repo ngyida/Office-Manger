@@ -86,7 +86,8 @@ const AddTutorial = () => {
           <div className="form-group d-flex flex-column mb-3">
             <label htmlFor="published" className="mr-3">Status</label>
             <select
-              className="selectpicker ml-2"
+              className="form-select" 
+              aria-label="Default select example"
               id="published"
               required
               value={tutorial.published}
