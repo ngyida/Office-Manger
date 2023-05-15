@@ -55,17 +55,14 @@ exports.find = (req, res) => {
 exports.findByTitle = (req, res) => {
   const collection = db.get().collection("tutorials");
   console.log("req:" + req.params.title)
-  collection.findOne({ title: req.params.title})
-  .then((tutorial) => {
-    if (!tutorial) {
-      return res.status(404).send({ message: "Tutorial not found" });
-    }
-    console.log(tutorial);
-    res.send(tutorial);
+  collection.find({ title: req.params.title}).toArray().
+  then((arr) => {
+      console.log(arr);
+      res.send(arr);
   })
   .catch((err) => {
-    console.log(err);
-    res.status(500).send({ message: "Error retrieving tutorial" });
+      console.log(err);
+      res.status(500).send({ message: "Error retrieving tutorials" });
   })
 }
 

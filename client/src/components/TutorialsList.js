@@ -49,7 +49,7 @@ const TutorialsList = (props) => {
   const findByTitle = () => {
     TutorialDataService.findByTitle(searchTitle)
       .then((response) => {
-        setTutorials([response.data]);
+        setTutorials(response.data);
       })
       .catch((e) => {
         console.log(e);
