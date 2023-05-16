@@ -47,13 +47,18 @@ const TutorialsList = (props) => {
   };
 
   const findByTitle = () => {
-    TutorialDataService.findByTitle(searchTitle)
+    if (searchTitle !== "") {
+      TutorialDataService.findByTitle(searchTitle)
       .then((response) => {
         setTutorials(response.data);
       })
       .catch((e) => {
         console.log(e);
       });
+    } else {
+      refreshList();
+    }
+    
   };
 
   const openTutorial = (rowIndex) => {
@@ -133,7 +138,7 @@ const TutorialsList = (props) => {
       data: tutorials,
       initialState: { pageIndex: 0 },
     },
-    usePagination // Add the usePagination hook here
+    usePagination
   );
 
   return (
@@ -146,6 +151,12 @@ const TutorialsList = (props) => {
             placeholder="Search by title"
             value={searchTitle}
             onChange={onChangeSearchTitle}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                findByTitle();
+              }
+            }}
           />
           <div className="input-group-append">
             <button
