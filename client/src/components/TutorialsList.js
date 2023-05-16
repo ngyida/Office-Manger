@@ -99,16 +99,6 @@ const TutorialsList = (props) => {
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
-            // <div>
-            //   <span onClick={() => openTutorial(rowIdx)} className="mr-10">
-            //     <i className="far fa-edit action"></i>
-            //   </span>
-
-            //   <span className="ml-2" onClick={() => deleteTutorial(rowIdx)}>
-            //     <i className="fas fa-trash action"></i>
-            //   </span>
-            // </div>
-
             <div>
               <span onClick={() => openTutorial(rowIdx)}>
                 <i className="far fa-edit action"></i>

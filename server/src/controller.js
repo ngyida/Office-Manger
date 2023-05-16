@@ -11,7 +11,6 @@ exports.create = (req, res) => {
   };
   collection.insertOne(tutorial)
     .then(result => {
-        console.log(result);
         res.status(200).send(result);
     })
     .catch(error => {
@@ -25,7 +24,6 @@ exports.findAll = (req, res) => {
   const collection = db.get().collection("tutorials");
   collection.find({}).toArray().
     then((arr) => {
-        console.log(arr);
         res.send(arr);
     })
     .catch((err) => {
@@ -42,7 +40,6 @@ exports.find = (req, res) => {
     if (!tutorial) {
       return res.status(404).send({ message: "Tutorial not found" });
     }
-    console.log(tutorial);
     res.send(tutorial);
   })
   .catch((err) => {
@@ -54,10 +51,8 @@ exports.find = (req, res) => {
 // Find a tutorial by the title in the request
 exports.findByTitle = (req, res) => {
   const collection = db.get().collection("tutorials");
-  console.log("req:" + req.params.title)
   collection.find({ title: req.params.title}).toArray().
   then((arr) => {
-      console.log(arr);
       res.send(arr);
   })
   .catch((err) => {
@@ -78,7 +73,6 @@ exports.update = (req, res) => {
     { _id: new ObjectId(req.params.id) },
     { $set: tutorial })
     .then(result => {
-        console.log(result);
         res.status(200).send(result);
     })
     .catch(error => {
@@ -93,7 +87,6 @@ exports.delete = (req, res) => {
   collection.deleteOne(
     { _id: new ObjectId(req.params.id) })
     .then(result => {
-        console.log(result);
         res.status(200).send(result);
     })
     .catch(error => {
@@ -107,7 +100,6 @@ exports.deleteAll = (req, res) => {
   const collection = db.get().collection("tutorials");
   collection.deleteMany({})
     .then(result => {
-      console.log(result);
       res.status(200).send(result);
     })
     .catch(error => {

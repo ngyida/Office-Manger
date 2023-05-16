@@ -34,6 +34,7 @@ function App() {
       <div className="container mt-3">
         <Routes>
           <Route path="/tutorials" Component={TutorialsList} />
+          <Route path="/" Component={TutorialsList} />
           <Route path="/add" Component={AddTutorial} />
           <Route path="/tutorials/:id" Component={Tutorial} />
         </Routes>

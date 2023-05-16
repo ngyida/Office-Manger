@@ -18,7 +18,6 @@ const Tutorial = props => {
     TutorialDataService.get(id)
       .then(response => {
         setCurrentTutorial(response.data);
-        console.log(response.data);
       })
       .catch(e => {
         console.log(e);
@@ -45,7 +44,6 @@ const Tutorial = props => {
     TutorialDataService.update(currentTutorial._id, data)
       .then(response => {
         setCurrentTutorial({ ...currentTutorial, published: status });
-        console.log(response.data);
         setMessage("The status was updated successfully!");
       })
       .catch(e => {
@@ -56,7 +54,6 @@ const Tutorial = props => {
   const updateTutorial = () => {
     TutorialDataService.update(currentTutorial._id, currentTutorial)
       .then(response => {
-        console.log(response.data);
         setMessage("The tutorial was updated successfully!");
       })
       .catch(e => {
@@ -67,7 +64,6 @@ const Tutorial = props => {
   const deleteTutorial = () => {
     TutorialDataService.remove(currentTutorial._id)
       .then(response => {
-        console.log(response.data);
         navigate("/tutorials");
       })
       .catch(e => {
@@ -108,11 +104,13 @@ const Tutorial = props => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group mt-1 mb-1">
               <label>
-                <strong>Status:</strong>
-              </label>
-              {currentTutorial.published ? "Published" : "Pending"}
+                Status:
+              </label>{" "}
+              <span>
+                <strong>{currentTutorial.published ? "Published" : "Pending"}</strong>
+              </span>
             </div>
           </form>
 
@@ -156,7 +154,7 @@ const Tutorial = props => {
           >
             Back
           </button>
-          <p>{message}</p>
+          <p className="mt-3">{message}</p>
         </div>
       ) : (
         <div>

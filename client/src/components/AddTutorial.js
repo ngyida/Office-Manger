@@ -35,7 +35,6 @@ const AddTutorial = () => {
             description: response.data.description,
             published: response.data.published
           });
-          console.log(response.data);
           setTutorial(initialTutorialState);
         })
         .catch(e => {
