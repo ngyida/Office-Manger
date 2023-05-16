@@ -29,12 +29,6 @@ const AddTutorial = () => {
   
       TutorialDataService.create(data)
         .then(response => {
-          setTutorial({
-            id: response.data.id,
-            title: response.data.title,
-            description: response.data.description,
-            published: response.data.published
-          });
           setTutorial(initialTutorialState);
         })
         .catch(e => {
