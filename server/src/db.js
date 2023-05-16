@@ -1,9 +1,10 @@
 const MongoClient = require("mongodb").MongoClient;
+require('dotenv').config()
 
 let db;
 
 exports.connect = () => {
-    const uri = "mongodb+srv://myserver_cluster:naV9SfDVZp7FT2nu@cluster0.uqbipnr.mongodb.net/?retryWrites=true&w=majority"
+    const uri = process.env.URI
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
     client.connect()
         .then(() => {

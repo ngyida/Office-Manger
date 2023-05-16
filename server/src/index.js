@@ -3,11 +3,12 @@ const cors = require('cors')
 const bodyParser = require('body-parser');
 const tutorialsRoutes = require("./routes.js");
 const db = require('./db');
+require('dotenv').config()
 
 const app = express()
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT
 var corsOptions = {
-  origin: "http://localhost:3000"
+  origin: process.env.ORIGIN
 }
 
 app.use(express.json())
