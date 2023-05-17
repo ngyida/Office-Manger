@@ -28,7 +28,7 @@ exports.findAll = (req, res) => {
   const collection = getTutorialsCollection();
   collection.find({}).toArray().
     then((arr) => {
-        res.send(arr);
+        res.status(200).send(arr);
     })
     .catch((err) => {
         console.log(err);
@@ -44,7 +44,7 @@ exports.find = (req, res) => {
     if (!tutorial) {
       return res.status(404).send({ message: "Tutorial not found" });
     }
-    res.send(tutorial);
+    res.status(200).send(tutorial);
   })
   .catch((err) => {
     console.log(err);
@@ -57,7 +57,7 @@ exports.findByTitle = (req, res) => {
   const collection = getTutorialsCollection();
   collection.find({ title: req.params.title}).toArray().
   then((arr) => {
-      res.send(arr);
+      res.status(200).send(arr);
   })
   .catch((err) => {
       console.log(err);
