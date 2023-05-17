@@ -1,9 +1,13 @@
 const db = require("./db");
 const { ObjectId } = require("mongodb");
 
+const getTutorialsCollection = () => {
+  return db.get().collection("tutorials");
+};
+
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
-  const collection = db.get().collection("tutorials");
+  const collection = getTutorialsCollection();
   const tutorial = {
     title: req.body.title,
     description: req.body.description,
@@ -21,7 +25,7 @@ exports.create = (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-  const collection = db.get().collection("tutorials");
+  const collection = getTutorialsCollection();
   collection.find({}).toArray().
     then((arr) => {
         res.send(arr);
@@ -34,7 +38,7 @@ exports.findAll = (req, res) => {
 
 // Find a tutorial by the id in the request
 exports.find = (req, res) => {
-  const collection = db.get().collection("tutorials");
+  const collection = getTutorialsCollection();
   collection.findOne({ _id: new ObjectId(req.params.id) })
   .then((tutorial) => {
     if (!tutorial) {
@@ -50,7 +54,7 @@ exports.find = (req, res) => {
 
 // Find a tutorial by the title in the request
 exports.findByTitle = (req, res) => {
-  const collection = db.get().collection("tutorials");
+  const collection = getTutorialsCollection();
   collection.find({ title: req.params.title}).toArray().
   then((arr) => {
       res.send(arr);
@@ -63,7 +67,7 @@ exports.findByTitle = (req, res) => {
 
 // Update a Tutorial by the id in the request
 exports.update = (req, res) => {
-  const collection = db.get().collection("tutorials");
+  const collection = getTutorialsCollection();
   const tutorial = {
     title: req.body.title,
     description: req.body.description,
@@ -83,7 +87,7 @@ exports.update = (req, res) => {
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = (req, res) => {
-  const collection = db.get().collection("tutorials");
+  const collection = getTutorialsCollection();
   collection.deleteOne(
     { _id: new ObjectId(req.params.id) })
     .then(result => {
@@ -97,7 +101,7 @@ exports.delete = (req, res) => {
 
 // Delete all Tutorials from the database
 exports.deleteAll = (req, res) => {
-  const collection = db.get().collection("tutorials");
+  const collection = getTutorialsCollection();
   collection.deleteMany({})
     .then(result => {
       res.status(200).send(result);

@@ -24,10 +24,6 @@ const Tutorial = props => {
       });
   };
 
-  useEffect(() => {
-    getTutorial(location.state._id);
-  }, [location.state._id]);
-
   const handleInputChange = event => {
     const { name, value } = event.target;
     setCurrentTutorial({ ...currentTutorial, [name]: value });
@@ -75,6 +71,10 @@ const Tutorial = props => {
     navigate("/tutorials")
   }
 
+  useEffect(() => {
+    getTutorial(location.state._id);
+  }, [location.state._id]);
+  
   return (
     <div>
       {currentTutorial ? (

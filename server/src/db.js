@@ -1,7 +1,7 @@
 const MongoClient = require("mongodb").MongoClient;
 require('dotenv').config()
 
-let db;
+let db = null;
 
 exports.connect = () => {
     const uri = process.env.URI

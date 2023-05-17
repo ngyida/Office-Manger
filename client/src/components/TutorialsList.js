@@ -12,10 +12,6 @@ const TutorialsList = (props) => {
 
   tutorialsRef.current = tutorials;
 
-  useEffect(() => {
-    retrieveTutorials();
-  }, []);
-
   const onChangeSearchTitle = (e) => {
     const searchTitle = e.target.value;
     setSearchTitle(searchTitle);
@@ -140,6 +136,10 @@ const TutorialsList = (props) => {
     },
     usePagination
   );
+
+  useEffect(() => {
+    retrieveTutorials();
+  }, []);
 
   return (
     <div className="list row">
