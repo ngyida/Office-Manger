@@ -115,27 +115,26 @@ exports.findByTitle = async (req, res) => {
 }
 
 // Update a Tutorial by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
   if (!isInputValid(req)) {
     res.status(500).send({ message: "invalid input" });
     return;
   }
-  const collection = getTutorialsCollection();
-  const tutorial = {
-    title: req.body.title,
-    description: req.body.description,
-    published: req.body.published ? req.body.published : false
-  };
-  collection.updateOne(
-    { _id: new ObjectId(req.params.id) },
-    { $set: tutorial })
-    .then(result => {
-        res.status(200).send(result);
-    })
-    .catch(error => {
-        console.error(error);
-        res.status(500).send({ message: "Error creating tutorial" });
-    })
+
+  try {
+    const collection = getTutorialsCollection();
+    const tutorial = {
+      title: req.body.title,
+      description: req.body.description,
+      published: req.body.published ? req.body.published : false
+    };
+    const result = await collection.updateOne(
+      { _id: new ObjectId(req.params.id) },
+      { $set: tutorial });
+    res.status(200).send(result);
+  } catch (err) {
+    res.status(500).send({ message: "Error creating tutorial" + err });
+  }
 };
 
 // Delete a Tutorial with the specified id in the request
