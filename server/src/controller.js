@@ -15,39 +15,36 @@ const isInputValid = (req) => {
 }
 
 // Create and Save a new Tutorial
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   if (!isInputValid(req)) {
     res.status(500).send({ message: "invalid input" });
     return;
   }
 
-  const collection = getTutorialsCollection();
-  const tutorial = {
-    title: req.body.title,
-    description: req.body.description,
-    published: req.body.published
-  };
-  collection.insertOne(tutorial)
-    .then(result => {
-        res.status(200).send(result);
-    })
-    .catch(error => {
-        console.error(error);
-        res.status(500).send({ message: "Error creating tutorial" });
-    })
+  try {
+    const collection = getTutorialsCollection();
+    const tutorial = {
+      title: req.body.title,
+      description: req.body.description,
+      published: req.body.published
+    };
+    const result = await collection.insertOne(tutorial)
+    res.status(200).send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Error creating tutorial" });
+  }
 };
 
 // Retrieve all Tutorials from the database.
-exports.findAll = (req, res) => {
-  const collection = getTutorialsCollection();
-  collection.find({}).toArray().
-    then((arr) => {
-        res.status(200).send(arr);
-    })
-    .catch((err) => {
-        console.log(err);
-        res.status(500).send({ message: "Error retrieving tutorials" });
-    })
+exports.findAll = async (req, res) => {
+  try {
+    const collection = getTutorialsCollection();
+    const tutorials = await collection.find({}).toArray()
+    res.status(200).send(tutorials);
+  } catch (err) {
+    res.status(500).send({ message: "Error retrieving tutorials: " + err });
+  }
 };
 
 // Retrieve all Tutorials in the current page
