@@ -2,6 +2,10 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import TutorialDataService from "../services/TutorialService";
 import { useTable, usePagination } from "react-table";
 import { useNavigate } from "react-router-dom";
+import SearchBar from "./SearchBar";
+import Pagination from "./Pagination";
+import Table from "./Table";
+import RemoveButton from "./RemoveButton";
 
 
 const TutorialsList = (props) => {
@@ -143,99 +147,29 @@ const TutorialsList = (props) => {
 
   return (
     <div className="list row">
-      <div className="col-md-8">
-        <div className="input-group mb-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search by title"
-            value={searchTitle}
-            onChange={onChangeSearchTitle}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                findByTitle();
-              }
-            }}
-          />
-          <div className="input-group-append">
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={findByTitle}
-            >
-              Search
-            </button>
-          </div>
-        </div>
-      </div>
+      <SearchBar searchTitle={searchTitle} onChangeSearchTitle={onChangeSearchTitle} findByTitle={findByTitle} />
 
-      <div className="col-md-12 list">
-        <table
-          className="table table-striped table-bordered"
-          {...getTableProps()}
-        >
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {page.map((row, i) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      {/* Table */}
+      <Table 
+      getTableProps={getTableProps} 
+      getTableBodyProps={getTableBodyProps}
+      headerGroups={headerGroups}
+      page={page}
+      prepareRow={prepareRow}
+      openTutorial={openTutorial}
+      deleteTutorial={deleteTutorial}
+      />
 
-      <div className="pagination justify-content-end mb-3">
-        <ul className="pagination">
-          <li className="page-item">
-            <button
-              className="page-link"
-              onClick={() => previousPage()}
-              disabled={!canPreviousPage}
-            >
-              {"<"}
-            </button>
-          </li>
-          <li className="page-item">
-            <button className="page-link" disabled>
-              Page {pageIndex + 1} of {pageOptions.length}
-            </button>
-          </li>
-          <li className="page-item">
-            <button
-              className="page-link"
-              onClick={() => nextPage()}
-              disabled={!canNextPage}
-            >
-              {">"}
-            </button>
-          </li>
-        </ul>
-      </div>
+      <Pagination 
+      previousPage={previousPage} 
+      canPreviousPage={canPreviousPage} 
+      pageIndex={pageIndex} nextPage={nextPage} 
+      canNextPage={canNextPage} 
+      pageOptions={pageOptions}
+      />
 
-      <div className="col-md-8">
-        <button className="btn btn-sm btn-danger" onClick={removeAllTutorials}>
-          Remove All
-        </button>
-      </div>
+      {/* remove all */}
+      <RemoveButton removeAllTutorials={removeAllTutorials} />
     </div>
   );
 };
