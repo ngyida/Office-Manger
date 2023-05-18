@@ -74,19 +74,18 @@ exports.findPage = async (req, res) => {
 }
 
 // Find a tutorial by the id in the request
-exports.find = (req, res) => {
-  const collection = getTutorialsCollection();
-  collection.findOne({ _id: new ObjectId(req.params.id) })
-  .then((tutorial) => {
+exports.find = async (req, res) => {
+  try {
+    const collection = getTutorialsCollection();
+    const tutorial = await collection.findOne({ _id: new ObjectId(req.params.id) })
     if (!tutorial) {
-      return res.status(404).send({ message: "Tutorial not found" });
+      res.status(404).send({ message: "Tutorial not found" });
+      return;
     }
     res.status(200).send(tutorial);
-  })
-  .catch((err) => {
-    console.log(err);
-    res.status(500).send({ message: "Error retrieving tutorial" });
-  })
+  } catch (err) {
+    res.status(500).send({ message: "Error retrieving tutorial" + err });
+  }
 };
 
 // Find a tutorial by the title in the request
