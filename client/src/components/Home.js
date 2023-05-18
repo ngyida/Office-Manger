@@ -3,36 +3,31 @@ import TutorialDataService from "../services/TutorialService";
 import { useTable, usePagination } from "react-table";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
-import Pagination from "./Pagination";
 import Table from "./Table";
 import RemoveButton from "./RemoveButton";
 
 
-const TutorialsList = (props) => {
+const Home = (props) => {
   const [tutorials, setTutorials] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [searchTitle, setSearchTitle] = useState("");
   const tutorialsRef = useRef();
   const navigate = useNavigate();
 
   tutorialsRef.current = tutorials;
 
-  const onChangeSearchTitle = (e) => {
+  const handleSearchTitleChange = (e) => {
     const searchTitle = e.target.value;
     setSearchTitle(searchTitle);
   };
 
-  const retrieveTutorials = () => {
-    TutorialDataService.getAll()
-      .then((response) => {
-        setTutorials(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  const handlePageChange = (pageNum) => {
+    setCurrentPage(pageNum);
   };
 
   const refreshList = () => {
-    retrieveTutorials();
+    fetchTutorials();
   };
 
   const removeAllTutorials = () => {
@@ -46,19 +41,19 @@ const TutorialsList = (props) => {
       });
   };
 
-  const findByTitle = () => {
-    if (searchTitle !== "") {
-      TutorialDataService.findByTitle(searchTitle)
-      .then((response) => {
-        setTutorials(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    } else {
-      refreshList();
+  const findByTitle = async () => {
+    try {
+      if (searchTitle !== "") {
+        const response = await TutorialDataService.findByTitle(searchTitle);
+        const { tutorials, totalPages } = response.data;
+        setTutorials(tutorials);
+        setTotalPages(totalPages);
+      } else {
+        refreshList();
+      }
+    } catch (err) {
+      console.log(err);
     }
-    
   };
 
   const openTutorial = (rowIndex) => {
@@ -73,12 +68,23 @@ const TutorialsList = (props) => {
       .then((response) => {
         let newTutorials = [...tutorialsRef.current];
         newTutorials.splice(rowIndex, 1);
-
         setTutorials(newTutorials);
       })
       .catch((e) => {
         console.log(e);
       });
+  };
+
+  const fetchTutorials = async (pageNum) => {
+    console.log("fetchTutorials called");
+    try {
+      const response = await TutorialDataService.getPage(pageNum);
+      const { tutorials, totalPages } = response.data;
+      setTutorials(tutorials);
+      setTotalPages(totalPages);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const columns = useMemo(
@@ -142,36 +148,30 @@ const TutorialsList = (props) => {
   );
 
   useEffect(() => {
-    retrieveTutorials();
-  }, []);
+    console.log("useEffect called")
+    fetchTutorials(currentPage);
+  }, [currentPage]);
 
   return (
     <div className="list row">
-      <SearchBar searchTitle={searchTitle} onChangeSearchTitle={onChangeSearchTitle} findByTitle={findByTitle} />
+      <SearchBar searchTitle={searchTitle} onChangeSearchTitle={handleSearchTitleChange} findByTitle={findByTitle} />
 
-      {/* Table */}
-      <Table 
-      getTableProps={getTableProps} 
+      <Table
+      getTableProps={getTableProps}
       getTableBodyProps={getTableBodyProps}
       headerGroups={headerGroups}
       page={page}
       prepareRow={prepareRow}
       openTutorial={openTutorial}
       deleteTutorial={deleteTutorial}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      handlePageChange={handlePageChange}
       />
 
-      <Pagination 
-      previousPage={previousPage} 
-      canPreviousPage={canPreviousPage} 
-      pageIndex={pageIndex} nextPage={nextPage} 
-      canNextPage={canNextPage} 
-      pageOptions={pageOptions}
-      />
-
-      {/* remove all */}
       <RemoveButton removeAllTutorials={removeAllTutorials} />
     </div>
   );
 };
 
-export default TutorialsList;
+export default Home;
