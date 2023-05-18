@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import TutorialDataService from "../services/TutorialService";
 import {useLocation, useNavigate} from 'react-router-dom';
 
@@ -13,6 +13,7 @@ const Tutorial = props => {
   const [message, setMessage] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
+  const formRef = useRef(null);
 
   const getTutorial = id => {
     TutorialDataService.get(id)
@@ -48,13 +49,17 @@ const Tutorial = props => {
   };
 
   const updateTutorial = () => {
-    TutorialDataService.update(currentTutorial._id, currentTutorial)
+    if (formRef.current.checkValidity()) {
+      TutorialDataService.update(currentTutorial._id, currentTutorial)
       .then(response => {
         setMessage("The tutorial was updated successfully!");
       })
       .catch(e => {
         console.log(e);
       });
+    } else {
+      alert("Please fill in all fields")
+    }
   };
 
   const deleteTutorial = () => {
@@ -80,13 +85,15 @@ const Tutorial = props => {
       {currentTutorial ? (
         <div className="edit-form">
           <h4>Update Tutorial</h4>
-          <form>
+          <form ref={formRef}>
             <div className="form-group">
               <label htmlFor="title">Title</label>
               <input
                 type="text"
                 className="form-control"
                 id="title"
+                required
+                maxLength={100}
                 name="title"
                 value={currentTutorial.title}
                 onChange={handleInputChange}
@@ -98,6 +105,8 @@ const Tutorial = props => {
                 type="text"
                 className="form-control"
                 id="description"
+                required
+                maxLength={100}
                 name="description"
                 value={currentTutorial.description}
                 onChange={handleInputChange}
