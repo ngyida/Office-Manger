@@ -138,12 +138,6 @@ const Home = (props) => {
     getTableBodyProps,
     headerGroups,
     page,
-    nextPage,
-    previousPage,
-    canNextPage,
-    canPreviousPage,
-    pageOptions,
-    state: { pageIndex, pageSize },
     prepareRow,
   } = useTable(
     {
