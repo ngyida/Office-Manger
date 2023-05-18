@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Pagination = ({ previousPage, canPreviousPage, pageIndex, nextPage, canNextPage, pageOptions }) => {
+const Pagination_old = ({ previousPage, canPreviousPage, pageIndex, nextPage, canNextPage, pageOptions }) => {
   return (
     <div className="pagination justify-content-end mb-3">
       <ul className="pagination">
@@ -20,6 +20,28 @@ const Pagination = ({ previousPage, canPreviousPage, pageIndex, nextPage, canNex
           </button>
         </li>
       </ul>
+    </div>
+  );
+};
+
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  const pageNumbers = [];
+
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
+
+  return (
+    <div>
+      {pageNumbers.map((pageNum) => (
+        <button
+          key={pageNum}
+          onClick={() => onPageChange(pageNum)}
+          disabled={currentPage === pageNum}
+        >
+          {pageNum}
+        </button>
+      ))}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React from 'react';
+import Pagination from './Pagination';
 
-const Table = ({ getTableProps, getTableBodyProps, headerGroups, page, prepareRow, openTutorial, deleteTutorial }) => {
+const Table = ({ getTableProps, getTableBodyProps, headerGroups, page, prepareRow, openTutorial, deleteTutorial, currentPage, totalPages, handlePageChange }) => {
   return (
     <div className="col-md-12 list">
       <table className="table table-striped table-bordered" {...getTableProps()}>
@@ -36,6 +37,11 @@ const Table = ({ getTableProps, getTableBodyProps, headerGroups, page, prepareRo
           })}
         </tbody>
       </table>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };
