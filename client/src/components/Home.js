@@ -12,6 +12,7 @@ const Home = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchTitle, setSearchTitle] = useState("");
+  const [isFiltered, setIsFiltered] = useState(false)
   const tutorialsRef = useRef();
   const navigate = useNavigate();
 
@@ -27,13 +28,13 @@ const Home = (props) => {
   };
 
   const refreshList = () => {
+    setIsFiltered(false);
     fetchTutorials();
   };
 
   const removeAllTutorials = () => {
     TutorialDataService.removeAll()
       .then((response) => {
-        console.log(response.data);
         refreshList();
       })
       .catch((e) => {
@@ -41,16 +42,23 @@ const Home = (props) => {
       });
   };
 
-  const findByTitle = async () => {
+  const findByTitle = async (pageNum) => {
     try {
-      if (searchTitle !== "") {
-        const response = await TutorialDataService.findByTitle(searchTitle);
-        const { tutorials, totalPages } = response.data;
-        setTutorials(tutorials);
-        setTotalPages(totalPages);
-      } else {
+      if (searchTitle == "") {
         refreshList();
+        return;
       }
+      if (!isFiltered) {
+        setCurrentPage(1);
+        pageNum = 1;
+      }
+      const response = await TutorialDataService.findByTitle(searchTitle, pageNum);
+      const { tutorials, totalPages } = response.data;
+      console.log(totalPages);
+      console.log(tutorials);
+      setIsFiltered(true);
+      setTutorials(tutorials);
+      setTotalPages(totalPages);
     } catch (err) {
       console.log(err);
     }
@@ -76,7 +84,6 @@ const Home = (props) => {
   };
 
   const fetchTutorials = async (pageNum) => {
-    console.log("fetchTutorials called");
     try {
       const response = await TutorialDataService.getPage(pageNum);
       const { tutorials, totalPages } = response.data;
@@ -148,8 +155,13 @@ const Home = (props) => {
   );
 
   useEffect(() => {
-    console.log("useEffect called")
-    fetchTutorials(currentPage);
+    if (isFiltered) {
+      console.log("findByTitle called")
+      findByTitle(currentPage);
+    } else {
+      console.log("fetchTutorials called")
+      fetchTutorials(currentPage);
+    }
   }, [currentPage]);
 
   return (

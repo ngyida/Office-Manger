@@ -32,17 +32,24 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   }
 
   return (
-    <div>
-      {pageNumbers.map((pageNum) => (
-        <button
-          key={pageNum}
-          onClick={() => onPageChange(pageNum)}
-          disabled={currentPage === pageNum}
-        >
-          {pageNum}
-        </button>
-      ))}
-    </div>
+    <nav aria-label="Page navigation">
+      <ul className="pagination justify-content-end">
+        {pageNumbers.map((pageNum) => (
+          <li
+            key={pageNum}
+            className={`page-item ${currentPage === pageNum ? "active" : ""}`}
+          >
+            <button
+              className="page-link"
+              onClick={() => onPageChange(pageNum)}
+              disabled={currentPage === pageNum}
+            >
+              {pageNum}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 };
 
