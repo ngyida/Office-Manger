@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 const db = require("./db");
 const { ObjectId } = require("mongodb");
+const PAGE_SIZE = 10; 
 
 const getTutorialsCollection = () => {
   return db.get().collection("tutorials");
@@ -52,15 +53,14 @@ exports.findPage = async (req, res) => {
   try {
     const collection = getTutorialsCollection();
     const pageNum = parseInt(req.params.pageNum);
-    const pageSize = 10; 
-    const offset = (pageNum - 1) * pageSize;
+    const offset = (pageNum - 1) * PAGE_SIZE;
 
     const tutorials = await collection.find({})
       .skip(offset)
-      .limit(pageSize)
+      .limit(PAGE_SIZE)
       .toArray()
     const totalTutorials = await collection.countDocuments({});
-    const totalPages = Math.ceil(totalTutorials / pageSize);
+    const totalPages = Math.ceil(totalTutorials / PAGE_SIZE);
 
     const response = {
       tutorials,
@@ -93,15 +93,14 @@ exports.findByTitle = async (req, res) => {
   try {
     const collection = getTutorialsCollection();
     const pageNum = parseInt(req.params.pageNum);
-    const pageSize = 10; 
-    const offset = (pageNum - 1) * pageSize;
+    const offset = (pageNum - 1) * PAGE_SIZE;
 
     const tutorials = await collection.find({ title: req.params.title })
       .skip(offset)
-      .limit(pageSize)
+      .limit(PAGE_SIZE)
       .toArray();
     const totalTutorials = await collection.countDocuments({ title: req.params.title });
-    const totalPages = Math.ceil(totalTutorials / pageSize);
+    const totalPages = Math.ceil(totalTutorials / PAGE_SIZE);
 
     const response = {
       tutorials,
