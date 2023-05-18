@@ -57,6 +57,7 @@ const AddTutorial = () => {
               className="form-control"
               id="title"
               required
+              maxLength={100}
               value={tutorial.title}
               onChange={handleInputChange}
               name="title"
@@ -70,6 +71,7 @@ const AddTutorial = () => {
               className="form-control"
               id="description"
               required
+              maxLength={100}
               value={tutorial.description}
               onChange={handleInputChange}
               name="description"
