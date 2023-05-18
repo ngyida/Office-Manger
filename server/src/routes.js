@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const tutorials = require("./controller.js");
+const { tutorialInputValidation } = require('./validations.js');
 
 // Create a new Tutorial
-router.post("/", tutorials.create);
+router.post("/", tutorialInputValidation, tutorials.create);
 
 // Retrieve all Tutorials
 router.get("/", tutorials.findAll);
@@ -12,7 +13,7 @@ router.get("/", tutorials.findAll);
 router.get("/:id", tutorials.find)
 
 // Update a Tutorial with id
-router.put("/:id", tutorials.update);
+router.put("/:id", tutorialInputValidation,tutorials.update);
 
 // Delete all Tutorial
 router.delete("/", tutorials.deleteAll);

@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const db = require("./db");
 const { ObjectId } = require("mongodb");
 
@@ -5,8 +6,21 @@ const getTutorialsCollection = () => {
   return db.get().collection("tutorials");
 };
 
+const isInputValid = (req) => {
+  let errors = validationResult(req).array();
+  if (errors.length != 0) {
+      return false;
+  }
+  return true;
+}
+
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
+  if (!isInputValid(req)) {
+    res.status(500).send({ message: "invalid input" });
+    return;
+  }
+
   const collection = getTutorialsCollection();
   const tutorial = {
     title: req.body.title,
@@ -67,6 +81,11 @@ exports.findByTitle = (req, res) => {
 
 // Update a Tutorial by the id in the request
 exports.update = (req, res) => {
+  if (!isInputValid(req)) {
+    res.status(500).send({ message: "invalid input" });
+    return;
+  }
+  console.log(req.body);
   const collection = getTutorialsCollection();
   const tutorial = {
     title: req.body.title,
