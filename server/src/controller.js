@@ -96,11 +96,16 @@ exports.find = (req, res) => {
 exports.findByTitle = async (req, res) => {
   try {
     const collection = getTutorialsCollection();
-    const pageSize = 10; // Define the number of tutorials per page
+    const pageNum = parseInt(req.params.pageNum);
+    const pageSize = 10; 
+    const offset = (pageNum - 1) * pageSize;
 
-    const tutorials = await collection.find({ title: req.params.title }).toArray();
-    const tutorialsCount = tutorials.length;
-    const totalPages = Math.ceil(tutorialsCount / pageSize);
+    const tutorials = await collection.find({ title: req.params.title })
+      .skip(offset)
+      .limit(pageSize)
+      .toArray();
+    const totalTutorials = await collection.countDocuments({ title: req.params.title });
+    const totalPages = Math.ceil(totalTutorials / pageSize);
 
     const response = {
       tutorials,

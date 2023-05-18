@@ -25,6 +25,6 @@ router.delete("/", tutorials.deleteAll);
 router.delete("/:id", tutorials.delete);
 
 // Find by title
-router.get("/title/:title", tutorials.findByTitle)
+router.get("/title/:title/:pageNum", tutorials.findByTitle)
 
 module.exports = router;
