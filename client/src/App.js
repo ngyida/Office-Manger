@@ -8,7 +8,7 @@ import "./App.css";
 
 import AddTutorial from "./components/AddTutorial";
 import Tutorial from "./components/Tutorial";
-import TutorialsList from "./components/TutorialsList";
+import Home from "./components/Home";
 
 function App() {
   return (
@@ -33,8 +33,8 @@ function App() {
 
       <div className="container mt-3">
         <Routes>
-          <Route path="/tutorials" Component={TutorialsList} />
-          <Route path="/" Component={TutorialsList} />
+          <Route path="/tutorials" Component={Home} />
+          <Route path="/" Component={Home} />
           <Route path="/add" Component={AddTutorial} />
           <Route path="/tutorials/:id" Component={Tutorial} />
         </Routes>

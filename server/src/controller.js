@@ -55,7 +55,7 @@ exports.findPage = async (req, res) => {
   try {
     const collection = getTutorialsCollection();
     const pageNum = parseInt(req.params.pageNum);
-    const pageSize = 10; // Define the number of tutorials per page
+    const pageSize = 10; 
     const offset = (pageNum - 1) * pageSize;
 
     const tutorials = await collection.find({})
@@ -93,16 +93,24 @@ exports.find = (req, res) => {
 };
 
 // Find a tutorial by the title in the request
-exports.findByTitle = (req, res) => {
-  const collection = getTutorialsCollection();
-  collection.find({ title: req.params.title}).toArray().
-  then((arr) => {
-      res.status(200).send(arr);
-  })
-  .catch((err) => {
-      console.log(err);
-      res.status(500).send({ message: "Error retrieving tutorials" });
-  })
+exports.findByTitle = async (req, res) => {
+  try {
+    const collection = getTutorialsCollection();
+    const pageSize = 10; // Define the number of tutorials per page
+
+    const tutorials = await collection.find({ title: req.params.title }).toArray();
+    const tutorialsCount = tutorials.length;
+    const totalPages = Math.ceil(tutorialsCount / pageSize);
+
+    const response = {
+      tutorials,
+      totalPages,
+    };
+    res.status(200).json(response);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error retrieving tutorials by search" });
+  }
 }
 
 // Update a Tutorial by the id in the request
