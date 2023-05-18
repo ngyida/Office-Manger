@@ -50,6 +50,30 @@ exports.findAll = (req, res) => {
     })
 };
 
+// Retrieve all Tutorials in the current page
+exports.findPage = (req, res) => {
+  // Get the page number and page size from the request parameters
+  const pageNumber = parseInt(req.query.pageNumber) || 1;
+  const pageSize = parseInt(req.query.pageSize) || 10;
+
+  // Calculate the offset based on the page number and page size
+  const offset = (pageNumber - 1) * pageSize;
+
+  // Use range queries to get the documents for the current page
+  const collection = getTutorialsCollection();
+  collection.find({})
+  .skip(offset)
+  .limit(pageSize)
+  .toArray()
+  .then((arr) => {
+    res.status(200).send(arr);
+  })
+  .catch(error => {
+    console.error(error);
+    res.status(500).send({ message: "Error retrieving tutorials in the page" });
+  });
+}
+
 // Find a tutorial by the id in the request
 exports.find = (req, res) => {
   const collection = getTutorialsCollection();

@@ -9,6 +9,9 @@ router.post("/", tutorialInputValidation, tutorials.create);
 // Retrieve all Tutorials
 router.get("/", tutorials.findAll);
 
+// Retrieve all Tutorials in a page
+router.get("/page/:pageNum", tutorials.findPage);
+
 // Retrieve a Tutorial
 router.get("/:id", tutorials.find)
 
