@@ -138,28 +138,23 @@ exports.update = async (req, res) => {
 };
 
 // Delete a Tutorial with the specified id in the request
-exports.delete = (req, res) => {
-  const collection = getTutorialsCollection();
-  collection.deleteOne(
-    { _id: new ObjectId(req.params.id) })
-    .then(result => {
-        res.status(200).send(result);
-    })
-    .catch(error => {
-        console.error(error);
-        res.status(500).send({ message: "Error deleting tutorial" });
-    })
+exports.delete = async (req, res) => {
+  try {
+    const collection = getTutorialsCollection();
+    const result = await collection.deleteOne({ _id: new ObjectId(req.params.id) });
+    res.status(200).send(result);
+  } catch(err) {
+    res.status(500).send({ message: "Error deleting tutorial" + err });
+  }
 };
 
 // Delete all Tutorials from the database
-exports.deleteAll = (req, res) => {
-  const collection = getTutorialsCollection();
-  collection.deleteMany({})
-    .then(result => {
-      res.status(200).send(result);
-    })
-    .catch(error => {
-      console.error(error);
-      res.status(500).send({ message: "Error deleting tutorials" });
-    })
+exports.deleteAll = async (req, res) => {
+  try {
+    const collection = getTutorialsCollection();
+    const result = await collection.deleteMany({})
+    res.status(200).send(result);
+  } catch(err) {
+    res.status(500).send({ message: "Error deleting tutorials" + err });
+  }
 };
