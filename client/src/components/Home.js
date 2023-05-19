@@ -51,26 +51,21 @@ const Home = (props) => {
       }
       const response = await TutorialDataService.findByTitle(encodeURIComponent(searchTitle), pageNum);
       const { tutorials, totalPages } = response.data;
-      console.log(totalPages);
-      console.log(tutorials);
       setIsFiltered(true);
       setTutorials(tutorials);
       setTotalPages(totalPages);
-      console.log("findByTitle called finished")
     } catch (err) {
       console.log(err);
     }
   };
 
   const onSearchClick = async () => {
-    console.log("onSearchClick called");
     await findByTitle(1);
     setCurrentPage(1);
   }
 
   const openTutorial = (rowIndex) => {
     const id = tutorialsRef.current[rowIndex]._id;
-    console.log(id);
     navigate("/tutorials/" + id, {state:{_id:id}});
   };
 
@@ -154,10 +149,8 @@ const Home = (props) => {
 
   useEffect(() => {
     if (isFiltered) {
-      console.log("findByTitle called in effect")
       findByTitle(currentPage);
     } else {
-      console.log("fetchTutorials called")
       fetchTutorials(currentPage);
     }
   }, [currentPage]);

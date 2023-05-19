@@ -91,7 +91,6 @@ exports.findByTitle = async (req, res) => {
   try {
     const pageNum = parseInt(req.params.pageNum);
     const offset = (pageNum - 1) * PAGE_SIZE;
-    console.log(req.params)
     const tutorials = await collection.find({ title: req.params.title })
       .skip(offset)
       .limit(PAGE_SIZE)
@@ -103,8 +102,6 @@ exports.findByTitle = async (req, res) => {
       tutorials,
       totalPages,
     };
-    console.log(response)
-
     res.status(200).json(response);
   } catch (err) {
     console.error(err);
