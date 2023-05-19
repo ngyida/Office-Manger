@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser');
 const tutorialsRoutes = require("./routes.js");
+const { initCollection } = require('./controller.js');
 const db = require('./db');
 require('dotenv').config()
 
@@ -15,7 +16,10 @@ app.use(bodyParser.json());
 app.use(cors(corsOptions))
 app.use("/tutorials", tutorialsRoutes);
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+const start = async () => {
+  await db.connect();
+  await initCollection(db.getCollection());
+  await app.listen(PORT, () => console.log(`Server running on port ${PORT}`))  
+}
 
-db.connect();
-  
+start();

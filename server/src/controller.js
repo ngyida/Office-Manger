@@ -3,10 +3,7 @@ const db = require("./db");
 const { ObjectId } = require("mongodb");
 
 const PAGE_SIZE = 10; 
-
-const getTutorialsCollection = () => {
-  return db.get().collection("tutorials");
-};
+let collection = null;
 
 const isInputValid = (req) => {
   let errors = validationResult(req).array();
@@ -14,6 +11,10 @@ const isInputValid = (req) => {
       return false;
   }
   return true;
+}
+
+exports.initCollection = async (collectionObj) => {
+  collection = collectionObj;
 }
 
 // Create and Save a new Tutorial
@@ -24,7 +25,6 @@ exports.create = async (req, res) => {
   }
 
   try {
-    const collection = getTutorialsCollection();
     const tutorial = {
       title: req.body.title,
       description: req.body.description,
@@ -41,7 +41,6 @@ exports.create = async (req, res) => {
 // Retrieve all Tutorials from the database.
 exports.findAll = async (req, res) => {
   try {
-    const collection = getTutorialsCollection();
     const tutorials = await collection.find({}).toArray()
     res.status(200).send(tutorials);
   } catch (err) {
@@ -52,7 +51,6 @@ exports.findAll = async (req, res) => {
 // Retrieve all Tutorials in the current page
 exports.findPage = async (req, res) => {
   try {
-    const collection = getTutorialsCollection();
     const pageNum = parseInt(req.params.pageNum);
     const offset = (pageNum - 1) * PAGE_SIZE;
 
@@ -77,7 +75,6 @@ exports.findPage = async (req, res) => {
 // Find a tutorial by the id in the request
 exports.find = async (req, res) => {
   try {
-    const collection = getTutorialsCollection();
     const tutorial = await collection.findOne({ _id: new ObjectId(req.params.id) })
     if (!tutorial) {
       res.status(404).send({ message: "Tutorial not found" });
@@ -90,9 +87,8 @@ exports.find = async (req, res) => {
 };
 
 // Find a tutorial by the title in the request
-exports.findByTitle = (req, res) => {
+exports.findByTitle = async (req, res) => {
   try {
-    const collection = getTutorialsCollection();
     const pageNum = parseInt(req.params.pageNum);
     const offset = (pageNum - 1) * PAGE_SIZE;
     console.log(req.params)
@@ -124,7 +120,6 @@ exports.update = async (req, res) => {
   }
 
   try {
-    const collection = getTutorialsCollection();
     const tutorial = {
       title: req.body.title,
       description: req.body.description,
@@ -142,7 +137,6 @@ exports.update = async (req, res) => {
 // Delete a Tutorial with the specified id in the request
 exports.delete = async (req, res) => {
   try {
-    const collection = getTutorialsCollection();
     const result = await collection.deleteOne({ _id: new ObjectId(req.params.id) });
     res.status(200).send(result);
   } catch(err) {
@@ -153,7 +147,6 @@ exports.delete = async (req, res) => {
 // Delete all Tutorials from the database
 exports.deleteAll = async (req, res) => {
   try {
-    const collection = getTutorialsCollection();
     const result = await collection.deleteMany({})
     res.status(200).send(result);
   } catch(err) {
