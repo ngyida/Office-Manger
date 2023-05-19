@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 const db = require("./db");
 const { ObjectId } = require("mongodb");
+
 const PAGE_SIZE = 10; 
 
 const getTutorialsCollection = () => {
@@ -89,12 +90,12 @@ exports.find = async (req, res) => {
 };
 
 // Find a tutorial by the title in the request
-exports.findByTitle = async (req, res) => {
+exports.findByTitle = (req, res) => {
   try {
     const collection = getTutorialsCollection();
     const pageNum = parseInt(req.params.pageNum);
     const offset = (pageNum - 1) * PAGE_SIZE;
-
+    console.log(req.params)
     const tutorials = await collection.find({ title: req.params.title })
       .skip(offset)
       .limit(PAGE_SIZE)
@@ -106,6 +107,8 @@ exports.findByTitle = async (req, res) => {
       tutorials,
       totalPages,
     };
+    console.log(response)
+
     res.status(200).json(response);
   } catch (err) {
     console.error(err);

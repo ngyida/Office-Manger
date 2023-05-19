@@ -52,7 +52,8 @@ const Home = (props) => {
         setCurrentPage(1);
         pageNum = 1;
       }
-      const response = await TutorialDataService.findByTitle(searchTitle, pageNum);
+      const response = await TutorialDataService.findByTitle(encodeURIComponent(searchTitle), pageNum);
+      console.log(response)
       const { tutorials, totalPages } = response.data;
       console.log(totalPages);
       console.log(tutorials);
