@@ -28,6 +28,7 @@ const Home = (props) => {
   };
 
   const refreshList = () => {
+    setCurrentPage(1);
     setIsFiltered(false);
     fetchTutorials();
   };
@@ -48,22 +49,24 @@ const Home = (props) => {
         refreshList();
         return;
       }
-      if (!isFiltered) {
-        setCurrentPage(1);
-        pageNum = 1;
-      }
       const response = await TutorialDataService.findByTitle(encodeURIComponent(searchTitle), pageNum);
-      console.log(response)
       const { tutorials, totalPages } = response.data;
       console.log(totalPages);
       console.log(tutorials);
       setIsFiltered(true);
       setTutorials(tutorials);
       setTotalPages(totalPages);
+      console.log("findByTitle called finished")
     } catch (err) {
       console.log(err);
     }
   };
+
+  const onSearchClick = async () => {
+    console.log("onSearchClick called");
+    await findByTitle(1);
+    setCurrentPage(1);
+  }
 
   const openTutorial = (rowIndex) => {
     const id = tutorialsRef.current[rowIndex]._id;
@@ -151,7 +154,7 @@ const Home = (props) => {
 
   useEffect(() => {
     if (isFiltered) {
-      console.log("findByTitle called")
+      console.log("findByTitle called in effect")
       findByTitle(currentPage);
     } else {
       console.log("fetchTutorials called")
@@ -161,7 +164,7 @@ const Home = (props) => {
 
   return (
     <div className="list row">
-      <SearchBar searchTitle={searchTitle} onChangeSearchTitle={handleSearchTitleChange} findByTitle={findByTitle} />
+      <SearchBar searchTitle={searchTitle} onChangeSearchTitle={handleSearchTitleChange} onSearchClick={onSearchClick} />
 
       <Table
       getTableProps={getTableProps}

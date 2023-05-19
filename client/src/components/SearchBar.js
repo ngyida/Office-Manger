@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SearchBar = ({ searchTitle, onChangeSearchTitle, findByTitle }) => {
+const SearchBar = ({ searchTitle, onChangeSearchTitle, onSearchClick }) => {
   return (
     <div className="col-md-8">
       <div className="input-group mb-3">
@@ -9,11 +9,12 @@ const SearchBar = ({ searchTitle, onChangeSearchTitle, findByTitle }) => {
           className="form-control"
           placeholder="Search by title"
           value={searchTitle}
+          maxLength={100}
           onChange={onChangeSearchTitle}
           onKeyPress={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
-              findByTitle();
+              onSearchClick();
             }
           }}
         />
@@ -21,7 +22,7 @@ const SearchBar = ({ searchTitle, onChangeSearchTitle, findByTitle }) => {
           <button
             className="btn btn-outline-secondary"
             type="button"
-            onClick={findByTitle}
+            onClick={onSearchClick}
           >
             Search
           </button>
